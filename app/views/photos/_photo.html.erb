@@ -1,27 +1,29 @@
+<% if policy(photo).show? %>
+
 <div class="card">
   <div class="card-body py-3 d-flex align-items-center justify-content-between">
     <h2 class="h5 m-0 p-0 d-flex align-items-center">
       <%= image_tag photo.owner.avatar_image, class: "rounded-circle mr-2", width: 36 %>
-
       <%= link_to photo.owner.username, user_path(photo.owner.username), class: "text-dark" %>
     </h2>
 
     <div>
-     <% if current_user == photo.owner %>
-      <%= link_to edit_photo_path(photo), class: "btn btn-link btn-sm text-muted" do %>
-        <i class="fas fa-edit fa-fw"></i>
+      <% if policy(photo).edit? %> 
+        <%= link_to edit_photo_path(photo), class: "btn btn-link btn-sm text-muted" do %>
+          <i class="fas fa-edit fa-fw"></i>
+        <% end %>
       <% end %>
 
+      <% if policy(photo).destroy? %> 
       <%= link_to photo, data: { turbo_method: :delete }, class: "btn btn-link btn-sm text-muted" do %>
-        <i class="fas fa-trash fa-fw"></i>
-      <% end %>
-
+       <i class="fas fa-trash fa-fw"></i>
+       <% end %>
       <% end %>
     </div>
   </div>
 
   <%= image_tag photo.image, class: "img-fluid" %>
-  
+
   <div class="card-body">
     <p class="card-text"><%= photo.caption %></p>
   </div>
@@ -36,3 +38,5 @@
     <%= render "comments/form", comment: photo.comments.build %>
   </div>
 </div>
+
+<%end%>
