@@ -26,7 +26,7 @@ class FollowRequestsController < ApplicationController
   def create
     @follow_request = FollowRequest.new(follow_request_params)
     @follow_request.sender = current_user
-
+    if @follow_request.recipient = !current_user
     respond_to do |format|
       if @follow_request.save
         format.html { redirect_back fallback_location: root_url, notice: "Follow request was successfully created." }
@@ -36,6 +36,7 @@ class FollowRequestsController < ApplicationController
         format.json { render json: @follow_request.errors, status: :unprocessable_entity }
       end
     end
+  end
   end
 
   # PATCH/PUT /follow_requests/1 or /follow_requests/1.json
