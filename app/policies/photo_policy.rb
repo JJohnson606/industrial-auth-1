@@ -12,6 +12,16 @@ def show?
     @photo.owner.followers.include?(@user)
 end
 
+
+def new?
+  create?
+ end
+ 
+ def create?
+   !@user.nil?
+ end
+ 
+
 def update?
 @user == @photo.owner
 end
@@ -19,16 +29,13 @@ end
 def edit?
   update?
 end
+
+# def photo_comment_create?
+#   @photo.owner.comment
+# end
+
 def photo_comment_edit?
    @photo.owner.comment
-end
-
-def new?
- create?
-end
-
-def create?
-  @user.present?
 end
 
 def photo_comment_destroy?

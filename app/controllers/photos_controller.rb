@@ -1,28 +1,35 @@
 class PhotosController < ApplicationController
   before_action :set_photo, only: %i[show edit update destroy]
-  before_action :authorize_photo, only: [:show, :new, :create, :edit, :update, :destroy]
+  before_action :authorize_photo, only: [:show, :edit, :update, :destroy]
 
   def index
     @photos = policy_scope(Photo)
-    @photos = Photo.all
   end
 
   def show
   end
 
   def new
-    @photo = Photo.new
+  @photo = Photo.new
+  authorize Photo
   end
 
   def edit
   end
 
   def create
-    @photo = current_user.photos.build(photo_params)
-    if @photo.save
-      redirect_to @photo, notice: "Photo was successfully created."
-    else
-      render :new, status: :unprocessable_entity
+   @photo = Photo.new(photo_params)
+   @photo.owner = current_user
+   authorize @photo
+   
+    respond_to do |format|
+      if @photo.save
+        format.html { redirect_to @photo, notice: "Photo was successfully created." }
+        format.json { render :show, status: :created, location: @photo }
+      else
+        format.html { render :new, status: :unprocessable_entity }
+        format.json { render json: @photo.errors, status: :unprocessable_entity }
+      end
     end
   end
 
