@@ -6,7 +6,6 @@
       <h1 class="mt-0 mb-3 display-4">
         <%= user.username %>
       </h1>
-
       <div>
         <span class="badge rounded-pill text-bg-secondary">
           <%= user.private? ? "Private" : "Public" %>
@@ -14,6 +13,9 @@
       </div>
     </div>
 
+
+
+<% if policy(@user).show_photos? %>
     <div class="row mb-4">
       <div class="col">
         <%=
@@ -48,7 +50,7 @@
 
         <% end %>
       </div>
-
+    <% if policy(@user).show_pending? %>
       <div class="col">
         <%=
           link_to "#",
@@ -66,6 +68,8 @@
         <% end %>
       </div>
     </div>
+<% end %>
+<% end %>
 
     <div class="row mb-3">
       <div class="col">
@@ -94,11 +98,13 @@
         <% end %>
       </div>
     </div>
-
+    <%=  follow_request %>
     <div class="row mb-4">
       <div class="col">
         <% follow_request = current_user.sent_follow_requests.find_by(recipient: @user) %>
         <% if follow_request %>
+
+  
           <%= link_to follow_request, data: { turbo_method: :delete }, class: "btn btn-outline-secondary btn-block" do %>
             <% if follow_request.pending? %>
               Un-request
@@ -109,9 +115,9 @@
         <% else %>
           <%= render "follow_requests/form", follow_request: @user.received_follow_requests.build %>
         <% end %>
+
       </div>
     </div>
-
     <h3 class="h5">
       <%= user.name %>
     </h3>

@@ -1,5 +1,8 @@
 class FollowRequestsController < ApplicationController
   before_action :set_follow_request, only: %i[ show edit update destroy ]
+  before_action :authorize_follow_request
+ 
+
 
   # GET /follow_requests or /follow_requests.json
   def index
@@ -23,7 +26,7 @@ class FollowRequestsController < ApplicationController
   def create
     @follow_request = FollowRequest.new(follow_request_params)
     @follow_request.sender = current_user
-
+    if @follow_request.recipient = !current_user
     respond_to do |format|
       if @follow_request.save
         format.html { redirect_back fallback_location: root_url, notice: "Follow request was successfully created." }
@@ -33,6 +36,7 @@ class FollowRequestsController < ApplicationController
         format.json { render json: @follow_request.errors, status: :unprocessable_entity }
       end
     end
+  end
   end
 
   # PATCH/PUT /follow_requests/1 or /follow_requests/1.json
@@ -58,9 +62,15 @@ class FollowRequestsController < ApplicationController
   end
 
   private
+  
     # Use callbacks to share common setup or constraints between actions.
     def set_follow_request
       @follow_request = FollowRequest.find(params[:id])
+    end
+
+
+    def authorize_follow_request  
+   authorize @follow_request || FollowRequest
     end
 
     # Only allow a list of trusted parameters through.
