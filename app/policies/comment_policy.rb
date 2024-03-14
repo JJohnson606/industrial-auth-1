@@ -7,16 +7,19 @@ class CommentPolicy < ApplicationPolicy
   end
 
   def show?
-   
     user == current_user ||
     !@comment.user.private? || 
    @comment.photo.owner.followers.include?(@user)
   end
-
-  def create?
-    !@user.nil? 
+  
+  def new?
+    create?
   end
-
+  
+  def create?
+    comment.photo && Pundit.policy(user, comment.photo).show?
+  end
+ 
   def update?
     @user == @comment.author # Only allow the user who created the comment to update it
   end

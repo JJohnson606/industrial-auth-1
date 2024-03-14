@@ -1,11 +1,12 @@
 class CommentsController < ApplicationController
   before_action :set_comment, only: %i[show edit update destroy]
-  before_action :authorize_comments, only: [:show, :edit, :new, :update, :destroy]
+  before_action :authorize_comment, only: [:show, :edit, :update, :destroy]
 
   # GET /comments or /comments.json
   def index
-  authorize @comment
+  
     @comments = Comment.all
+    authorize @comment
   end
 
   # GET /comments/1 or /comments/1.json
@@ -14,8 +15,8 @@ class CommentsController < ApplicationController
 
   # GET /comments/new
   def new
-
     @comment = Comment.new
+    authorize Comment
   end
 
   # GET /comments/1/edit
@@ -24,11 +25,10 @@ class CommentsController < ApplicationController
 
   # POST /comments or /comments.json
   def create
-  
-   
     @comment = Comment.new(comment_params)
     @comment.author = current_user
-
+    authorize @comment
+    
     respond_to do |format|
       if @comment.save
       puts "comment success"
@@ -72,7 +72,7 @@ class CommentsController < ApplicationController
     end
     
   
-    def authorize_comments
+    def authorize_comment
     authorize @comment
     end
 
