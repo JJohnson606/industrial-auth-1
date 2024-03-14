@@ -22,4 +22,4 @@ class FollowRequestPolicy < ApplicationPolicy
     follow_request.sender == user || follow_request.recipient == user 
   end
 
-  end
+end
