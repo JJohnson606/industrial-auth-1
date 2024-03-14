@@ -15,6 +15,10 @@ attr_reader :current_user, :user
     true
   end
 
+  def new?
+    @user == current_user
+  end
+  
   def discover?
     @user == @current_user 
   end
