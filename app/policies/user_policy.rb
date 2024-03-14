@@ -33,6 +33,9 @@ attr_reader :current_user, :user
      @user.followers.include?(@current_user)
   end
 
+  def show_pending?
+    @user == @current_user
+  end
 def update?
   user == current_user
 end
